@@ -2,31 +2,42 @@
 
 {% block content %}
 
-{{task.title}}
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h3 class="mb-0">{{task.title}}</h3>
+      {% if task.important %}
+      <span class="badge bg-warning text-dark">Important</span>
+      {% endif %}
+    </div>
+    <div class="card-body">
+      {% if error %}
+      <div class="alert alert-danger" role="alert">
+        {{error}}
+      </div>
+      {% endif %}
 
-{{error}}
+      <form method="POST">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button class="btn btn-primary">Update</button>
+      </form>
 
-<form method="POST">
-  {% csrf_token %}
-  {{form.as_p}}
+      <hr>
 
-  <button>
-    Update
-  </button>
-</form>
+      <div class="d-flex gap-2">
+        <form action="{% url 'complete_task' task.id %}" method="POST">
+          {% csrf_token %}
+          <button class="btn btn-success">Complete</button>
+        </form>
 
-<form action="{% url 'complete_task' task.id %}" method="POST">
-  {% csrf_token %}
-  <button>
-    complete
-  </button>
-</form>
-
-<form action="{% url 'delete_task' task.id %}" method="POST">
-  {% csrf_token %}
-  <button>
-    delete
-  </button>
-</form>
+        <form action="{% url 'delete_task' task.id %}" method="POST">
+          {% csrf_token %}
+          <button class="btn btn-danger">Delete</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
 {% endblock %}

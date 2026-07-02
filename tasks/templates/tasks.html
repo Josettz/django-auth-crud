@@ -1,20 +1,29 @@
 {% extends 'base.html' %} {% block content %}
 
-<h1>tasks</h1>
+<div class="container mt-4">
+  <h1 class="mb-4">Tasks</h1>
 
-<ul>
-  {% for task in tasks %}
-  <li>
-    <a href="{% url 'task_detail' task.id %}">
-      {% if task.important %}
-      <strong>{{task.title}}</strong>
-      {% else %} {{task.id}} {{task.title}} {% endif %}
-      <p>{{task.description}}</p>
-
-      {{task.datecompleted|date:'M j Y:i'}}
-    </a>
-  </li>
-  {% endfor %}
-</ul>
+  <div class="row">
+    {% for task in tasks %}
+    <div class="col-md-6 col-lg-4 mb-3">
+      <div class="card {% if task.important %}border-warning{% endif %}">
+        <div class="card-body">
+          <h5 class="card-title">
+            {% if task.important %}
+            <span class="badge bg-warning text-dark me-1">!</span>
+            {% endif %}
+            <a href="{% url 'task_detail' task.id %}" class="text-decoration-none">{{task.title}}</a>
+          </h5>
+          <p class="card-text text-muted">{{task.description|truncatewords:20}}</p>
+          <p class="card-text">
+            <small class="text-muted">{{task.datecompleted|date:'M j Y:i'}}</small>
+          </p>
+          <a href="{% url 'task_detail' task.id %}" class="btn btn-sm btn-outline-primary">View</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
 
 {% endblock %}
